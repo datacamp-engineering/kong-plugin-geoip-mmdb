@@ -19,10 +19,10 @@ jobs:
             wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
             tar zxvf GeoLite2-City.tar.gz
 
-            export LUA_PATH="/${CIRCLE_WORKING_DIRECTORY}/?.lua;/${CIRCLE_WORKING_DIRECTORY}/?/init.lua;/kong/?.lua;;"
+            export LUA_PATH="${CIRCLE_WORKING_DIRECTORY}/?.lua;${CIRCLE_WORKING_DIRECTORY}/?/init.lua;/kong/?.lua;;"
             cp spec/kong_tests.conf /kong/spec/
             cd /kong/
-            ./bin/busted /${CIRCLE_WORKING_DIRECTORY}/
+            ./bin/busted ${CIRCLE_WORKING_DIRECTORY}/
 
 workflows:
   version: 2
