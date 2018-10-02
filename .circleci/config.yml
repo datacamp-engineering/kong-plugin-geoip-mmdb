@@ -28,6 +28,7 @@ jobs:
           command: |
             wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
             tar zxvf GeoLite2-City.tar.gz
+            chmod 777 -R /root/project/GeoLite2*
 
             export LUA_PATH="/root/project/?.lua;/root/project/?/init.lua;/kong/?.lua;;"
             cp spec/kong_tests.conf /kong/spec/
