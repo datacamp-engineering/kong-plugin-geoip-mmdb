@@ -32,7 +32,8 @@ jobs:
             export LUA_PATH="/root/project/?.lua;/root/project/?/init.lua;/kong/?.lua;;"
             cp spec/kong_tests.conf /kong/spec/
             cd /kong/
-            ./bin/busted /root/project/
+            # hack as kong busted doesn't return correct error code
+            ./bin/busted /root/project/ | tee /dev/tty | grep '0 failures' && exit 0 || exit 1
 
 workflows:
   version: 2
