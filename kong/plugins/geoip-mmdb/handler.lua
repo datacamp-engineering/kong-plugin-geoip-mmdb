@@ -73,9 +73,6 @@ function plugin:access(conf)
   local geodb = assert(mmdb.read("/app/GeoLite2-City_20180925/GeoLite2-City.mmdb"))
   local geo_data = geodb:search_ipv4(remote_addr)
 
-  ngx.req.set_header("X-ISO-COUNTRY", geo_data.country.iso_code)
-  ngx.req.set_header("X-SOURCE", remote_addr)
-
   if conf.whitelist_ips and #conf.whitelist_ips > 0 then
     if iputils.ip_in_cidrs(remote_addr, cidr_cache(conf.whitelist_ips)) then
       return
