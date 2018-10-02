@@ -62,13 +62,7 @@ end
 function plugin:access(conf)
   plugin.super.access(self)
 
-  local remote_addr
-  local forwarded_for = ngx.req.get_headers()["x-forwarded-for"]
-  if fowarded_for then
-    remote_addr = forwarded_for[1]
-  else
-    remote_addr = ngx.var.remote_addr
-  end
+  local remote_addr = ngx.var.remote_addr
 
   local geodb = assert(mmdb.read("/app/GeoLite2-City_20180925/GeoLite2-City.mmdb"))
   local geo_data = geodb:search_ipv4(remote_addr)
