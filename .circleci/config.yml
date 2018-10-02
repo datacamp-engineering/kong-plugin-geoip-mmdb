@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: ${STAGING_ECR_URL}/kong-plugin-dev:testing
+        aws_auth: &ecr_credentials
+          aws_access_key_id: $STAGING_AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $STAGING_AWS_SECRET_ACCESS_KEY
+      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          POSTGRES_DB: kong
+          POSTGRES_USER: kong
+          POSTGRES_PASSWORD: kong
+    steps:
+      - checkout
+      - test:
+          name: Test
+          command: |
+            wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+            tar zxvf GeoLite2-City.tar.gz
+
+            export LUA_PATH="/app/?.lua;/app/?/init.lua;/kong/?.lua;;"
+            cp spec/kong_tests.conf /kong/spec/
+            cd /kong/
+            ./bin/busted /app/
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          context: org-global
