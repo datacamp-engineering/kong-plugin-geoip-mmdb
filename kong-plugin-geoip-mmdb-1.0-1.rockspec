@@ -9,7 +9,7 @@ description = {
 }
 dependencies = {
   "lua ~> 5.1",
-  "mmdblua ~> 0.1"
+  "mmdblua ~> 0.2"
 }
 build = {
   type = "builtin",
