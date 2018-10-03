@@ -34,7 +34,7 @@ jobs:
             cp spec/kong_tests.conf /kong/spec/
             cd /kong/
             # hack as kong busted doesn't return correct error code
-            ./bin/busted -o gtest -v /root/project/ | tee /dev/tty | grep '0 failures' && exit 0 || exit 1
+            ./bin/busted -v /root/project/ | tee /dev/tty | grep '0 failures' && exit 0 || exit 1
 
 workflows:
   version: 2
