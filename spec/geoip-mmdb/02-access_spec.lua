@@ -69,7 +69,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "212.120.189.12"
         }
       })
-      assert.res_status(403, res)
+      assert.res_status(404, res)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
