@@ -20,7 +20,7 @@ describe("Plugin: geoip-mmdb (access)", function()
         blacklist_iso = {'RU'},
         blacklist_geoname = {'703883'},
         whitelist_ips = {'212.120.189.11', '5.11.64.1'},
-        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb"
+        database_file = "/tmp/geolite/latestx/GeoLite2-City.mmdb"
       }
     })
 
