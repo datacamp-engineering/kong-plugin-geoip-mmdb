@@ -18,8 +18,8 @@ describe("Plugin: geoip-mmdb (access)", function()
       name = "geoip-mmdb",
       config = {
         blacklist_iso = {'PT'},
-        blacklist_geoname = {'703883'},
-        whitelist_ips = {'93.171.18.57', '5.43.0.1'},
+        blacklist_geoname = {'6269131'}, --[[ eng ]]
+        whitelist_ips = {'92.207.167.181', '5.43.0.1'}, --[[ eng, pt ]]
         database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb"
       }
     })
@@ -66,10 +66,10 @@ describe("Plugin: geoip-mmdb (access)", function()
         path    = "/status/200",
         headers = {
           ["Host"] = "test1.com",
-          ["X-Forwarded-For"] = "93.171.18.56"
+          ["X-Forwarded-For"] = "92.207.167.180"
         }
       })
-      assert.res_status(404, res)
+      assert.res_status(403, res)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
@@ -77,7 +77,7 @@ describe("Plugin: geoip-mmdb (access)", function()
         path    = "/status/200",
         headers = {
           ["Host"] = "test1.com",
-          ["X-Forwarded-For"] = "93.171.18.57"
+          ["X-Forwarded-For"] = "92.207.167.181"
         }
       })
       assert.res_status(200, res)
