@@ -55,7 +55,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "1.1.1.1"
         }
       })
-      local body = assert.res_status(200, res)
+      assert.res_status(200, res)
     end)
   end)
 
@@ -69,7 +69,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "212.120.189.12"
         }
       })
-      local body = assert.res_status(403, res)
+      assert.res_status(403, res)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
@@ -80,7 +80,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "212.120.189.11"
         }
       })
-      local body = assert.res_status(200, res)
+      assert.res_status(200, res)
     end)
   end)
 
@@ -94,7 +94,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "5.11.64.0"
         }
       })
-      local body = assert.res_status(403, res)
+      assert.res_status(403, res)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
@@ -105,7 +105,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "5.11.64.1"
         }
       })
-      local body = assert.res_status(200, res)
+      assert.res_status(200, res)
     end)
   end)
 end)
