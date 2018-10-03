@@ -64,7 +64,7 @@ function plugin:access(conf)
 
   local remote_addr = ngx.var.remote_addr
 
-  local geodb = assert(mmdb.read("/tmp/geolite/GeoLite2-City_20180925/GeoLite2-City.mmdb"))
+  local geodb = assert(mmdb.read(conf.database_file))
   local geo_data = geodb:search_ipv4(remote_addr)
 
   if conf.whitelist_ips and #conf.whitelist_ips > 0 then

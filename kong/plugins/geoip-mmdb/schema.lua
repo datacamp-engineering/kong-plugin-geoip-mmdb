@@ -16,6 +16,7 @@ return {
   fields = {
     whitelist_ips = {type = "array", func = validate_ips},
     blacklist_iso = {type = "array"},
-    blacklist_geoname = {type = "array"}
+    blacklist_geoname = {type = "array"},
+    database_file = {type = "string", default="/var/opt/geolite/latest/GeoLite2-City.mmdb"}
   }
 }
