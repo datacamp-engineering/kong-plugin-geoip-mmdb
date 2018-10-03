@@ -73,9 +73,11 @@ function plugin:access(conf)
     end
   end
 
-  for i,line in ipairs(conf.blacklist_iso) do
-    if line == geo_data.country.iso_code then
-      return responses.send_HTTP_FORBIDDEN()
+  if conf.blacklist_iso and #conf.blacklist_iso > 0 then
+    for i,line in ipairs(conf.blacklist_iso) do
+      if line == geo_data.country.iso_code then
+        return responses.send_HTTP_FORBIDDEN()
+      end
     end
   end
 end
