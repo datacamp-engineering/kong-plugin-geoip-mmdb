@@ -4,7 +4,7 @@ source = {
   url = "TBD"
 }
 description = {
-  summary = "A Kong plugin for geoip blocking using maxmind"
+  summary = "A Kong plugin for geoip blocking using maxmind",
   license = "MIT"
 }
 dependencies = {
