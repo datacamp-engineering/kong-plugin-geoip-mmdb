@@ -98,8 +98,7 @@ describe("Plugin: geoip-mmdb (access)", function()
         }
       })
       local body = assert.res_status(401, res)
-      local json = cjson.decode(body)
-      assert.same({message = "testing blocked"}, json)
+      assert.same("testing blocked", body)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {

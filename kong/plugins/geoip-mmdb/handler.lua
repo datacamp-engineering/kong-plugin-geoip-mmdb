@@ -2,6 +2,7 @@ local plugin = require("kong.plugins.base_plugin"):extend()
 local responses = require "kong.tools.responses"
 local iputils = require "resty.iputils"
 local mmdb = require "mmdb"
+local ngx = require "ngx"
 
 local new_tab
 do
@@ -47,6 +48,12 @@ local function cidr_cache(cidr_tab)
   return parsed_cidrs
 end
 
+local function block_respond(conf)
+  ngx.status = conf.error_status
+  ngx.say(conf.error_message)
+  ngx.exit(ngx.HTTP_OK)
+end
+
 function plugin:new()
   plugin.super.new(self, "geoip-mmdb")
 end
@@ -76,7 +83,7 @@ function plugin:access(conf)
   if conf.blacklist_iso and #conf.blacklist_iso > 0 then
     for i,line in ipairs(conf.blacklist_iso) do
       if line == geo_data.country.iso_code then
-        return responses.send(conf.error_status, conf.error_message)
+        block_respond(conf)
       end
     end
   end
@@ -85,7 +92,7 @@ function plugin:access(conf)
     for i,line in ipairs(conf.blacklist_geoname) do
       for j,subdivision in ipairs(geo_data.subdivisions) do
         if tonumber(line) == subdivision.geoname_id then
-          return responses.send(conf.error_status, conf.error_message)
+          block_respond(conf)
         end
       end
     end
