@@ -21,7 +21,6 @@ describe("Plugin: geoip-mmdb (access)", function()
         blacklist_iso = {'PT'},
         blacklist_geoname = {'6269131'}, --[[ eng ]]
         whitelist_ips = {'92.207.167.181', '5.43.0.1'}, --[[ eng, pt ]]
-        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb",
         error_message = "testing blocked",
         error_status = 401
       }
