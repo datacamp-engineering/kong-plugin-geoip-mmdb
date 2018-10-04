@@ -1,4 +1,5 @@
 local helpers = require "spec.helpers"
+local cjson = require "cjson"
 
 describe("Plugin: geoip-mmdb (access)", function()
   local client
@@ -96,7 +97,8 @@ describe("Plugin: geoip-mmdb (access)", function()
         }
       })
       local body = assert.res_status(403, res)
-      assert.same("testing blocked", body)
+      local json = cjson.decode(body)
+      assert.same({message = "testing blocked"}, json)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
