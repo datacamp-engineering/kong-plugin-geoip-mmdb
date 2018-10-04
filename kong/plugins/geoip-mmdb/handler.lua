@@ -2,6 +2,7 @@ local plugin = require("kong.plugins.base_plugin"):extend()
 local responses = require "kong.tools.responses"
 local iputils = require "resty.iputils"
 local mmdb = require "mmdb"
+local ngx = require "ngx"
 
 local new_tab
 do
