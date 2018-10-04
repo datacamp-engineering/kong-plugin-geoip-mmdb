@@ -1,4 +1,5 @@
 local helpers = require "spec.helpers"
+local cjson = require "cjson"
 
 describe("Plugin: geoip-mmdb (access)", function()
   local client
@@ -20,7 +21,9 @@ describe("Plugin: geoip-mmdb (access)", function()
         blacklist_iso = {'PT'},
         blacklist_geoname = {'6269131'}, --[[ eng ]]
         whitelist_ips = {'92.207.167.181', '5.43.0.1'}, --[[ eng, pt ]]
-        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb"
+        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb",
+        error_message = "testing blocked",
+        error_status = 401
       }
     })
 
@@ -69,7 +72,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "92.207.167.180"
         }
       })
-      assert.res_status(403, res)
+      assert.res_status(401, res)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
@@ -94,7 +97,9 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "5.43.0.0"
         }
       })
-      assert.res_status(403, res)
+      local body = assert.res_status(401, res)
+      local json = cjson.decode(body)
+      assert.same({message = "testing blocked"}, json)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {

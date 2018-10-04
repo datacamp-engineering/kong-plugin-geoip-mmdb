@@ -17,6 +17,8 @@ return {
     whitelist_ips = {type = "array", func = validate_ips},
     blacklist_iso = {type = "array"},
     blacklist_geoname = {type = "array"},
-    database_file = {type = "string", default="/var/opt/geolite/latest/GeoLite2-City.mmdb"}
+    database_file = {type = "string", default="/var/opt/geolite/latest/GeoLite2-City.mmdb"},
+    error_status = {type = "number", default=403},
+    error_message = {type = "string", default="This site is unavailable in your region"}
   }
 }
