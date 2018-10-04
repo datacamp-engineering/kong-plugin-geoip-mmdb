@@ -3,6 +3,7 @@ local responses = require "kong.tools.responses"
 local iputils = require "resty.iputils"
 local mmdb = require "mmdb"
 local ngx = require "ngx"
+local dbfile = "/var/opt/geolite/latest/GeoLite2-City.mmdb"
 
 local new_tab
 do
@@ -13,13 +14,10 @@ do
   end
 end
 
-
-local cache = {}
-
-
 plugin.PRIORITY = 991
 plugin.VERSION = "0.1.0"
 
+local cache = {}
 local function cidr_cache(cidr_tab)
   local cidr_tab_len = #cidr_tab
 
@@ -54,6 +52,8 @@ local function block_respond(conf)
   ngx.exit(ngx.HTTP_OK)
 end
 
+local geodb
+
 function plugin:new()
   plugin.super.new(self, "geoip-mmdb")
 end
@@ -64,6 +64,7 @@ function plugin:init_worker()
   if not ok then
     ngx.log(ngx.ERR, "[geoip-mmdb] Could not enable lrucache: ", err)
   end
+  geodb = assert(mmdb.read(dbfile))
 end
 
 function plugin:access(conf)
@@ -71,7 +72,6 @@ function plugin:access(conf)
 
   local remote_addr = ngx.var.remote_addr
 
-  local geodb = assert(mmdb.read(conf.database_file))
   local geo_data = geodb:search_ipv4(remote_addr)
 
   if conf.whitelist_ips and #conf.whitelist_ips > 0 then
