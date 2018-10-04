@@ -85,7 +85,7 @@ function plugin:access(conf)
     for i,line in ipairs(conf.blacklist_geoname) do
       for j,subdivision in ipairs(geo_data.subdivisions) do
         if tonumber(line) == subdivision.geoname_id then
-          return responses.send_HTTP_FORBIDDEN()
+          return responses.send(403, config.error_message)
         end
       end
     end

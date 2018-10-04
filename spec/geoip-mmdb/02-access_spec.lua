@@ -20,7 +20,8 @@ describe("Plugin: geoip-mmdb (access)", function()
         blacklist_iso = {'PT'},
         blacklist_geoname = {'6269131'}, --[[ eng ]]
         whitelist_ips = {'92.207.167.181', '5.43.0.1'}, --[[ eng, pt ]]
-        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb"
+        database_file = "/tmp/geolite/latest/GeoLite2-City.mmdb",
+        error_message = "testing blocked"
       }
     })
 
@@ -94,7 +95,8 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "5.43.0.0"
         }
       })
-      assert.res_status(403, res)
+      local body = assert.res_status(403, res)
+      assert.same("testing blocked", body)
     end)
     it("allows if in whitelist", function()
       local res = assert(client:send {
