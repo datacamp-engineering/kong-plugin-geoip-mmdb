@@ -51,7 +51,7 @@ end
 local function block_respond(conf)
   ngx.status = conf.error_status
   ngx.say(conf.error_message)
-  ngx.exist(ngx.HTTP_OK)
+  ngx.exit(ngx.HTTP_OK)
 end
 
 function plugin:new()
