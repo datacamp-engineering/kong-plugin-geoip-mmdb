@@ -80,7 +80,7 @@ function plugin:access(conf)
     end
   end
 
-  if conf.blacklist_iso and #conf.blacklist_iso > 0 and geo_data.country ~= nil and geo_data.country.iso_code ~= nil then
+  if conf.blacklist_iso and #conf.blacklist_iso > 0 and geo_data ~= nil and geo_data.country ~= nil and geo_data.country.iso_code ~= nil then
     for i,line in ipairs(conf.blacklist_iso) do
       if line == geo_data.country.iso_code then
         block_respond(conf)
@@ -88,7 +88,7 @@ function plugin:access(conf)
     end
   end
 
-  if conf.blacklist_geoname and #conf.blacklist_geoname > 0 and geo_data.subdivisions ~= nil then
+  if conf.blacklist_geoname and #conf.blacklist_geoname > 0 and geo_data ~= nil and geo_data.subdivisions ~= nil then
     for i,line in ipairs(conf.blacklist_geoname) do
       for j,subdivision in ipairs(geo_data.subdivisions) do
         if tonumber(line) == subdivision.geoname_id then
