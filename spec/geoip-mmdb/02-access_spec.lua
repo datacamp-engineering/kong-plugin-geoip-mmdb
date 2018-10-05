@@ -113,7 +113,7 @@ describe("Plugin: geoip-mmdb (access)", function()
   end)
 
   describe("invalid ip", function()
-    if("should be allowed", function()
+    it("should be allowed", function()
       local res = assert(client:send {
         method  = "GET",
         path    = "/status/200",
