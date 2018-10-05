@@ -80,7 +80,7 @@ function plugin:access(conf)
     end
   end
 
-  if conf.blacklist_iso and #conf.blacklist_iso > 0 then
+  if conf.blacklist_iso and #conf.blacklist_iso > 0 and geo_data.country ~= nil and geo_data.country.iso_code ~= nil then
     for i,line in ipairs(conf.blacklist_iso) do
       if line == geo_data.country.iso_code then
         block_respond(conf)
