@@ -124,7 +124,7 @@ describe("Plugin: geoip-mmdb (access)", function()
       })
       assert.res_status(200, res)
     end)
-    it("network should be allowed" function()
+    it("network should be allowed", function()
       local res = assert(client:send {
         method  = "GET",
         path    = "/status/200",
