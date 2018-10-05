@@ -111,4 +111,29 @@ describe("Plugin: geoip-mmdb (access)", function()
       assert.res_status(200, res)
     end)
   end)
+
+  describe("invalid ip", function()
+    it("local should be allowed", function()
+      local res = assert(client:send {
+        method  = "GET",
+        path    = "/status/200",
+        headers = {
+          ["Host"] = "test1.com",
+          ["X-Forwarded-For"] = "127.0.0.1"
+        }
+      })
+      assert.res_status(200, res)
+    end)
+    it("network should be allowed", function()
+      local res = assert(client:send {
+        method  = "GET",
+        path    = "/status/200",
+        headers = {
+          ["Host"] = "test1.com",
+          ["X-Forwarded-For"] = "10.1.1.1"
+        }
+      })
+      assert.res_status(200, res)
+    end)
+  end)
 end)
