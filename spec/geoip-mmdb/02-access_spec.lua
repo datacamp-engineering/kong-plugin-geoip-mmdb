@@ -18,7 +18,7 @@ describe("Plugin: geoip-mmdb (access)", function()
       route_id = api1.id,
       name = "geoip-mmdb",
       config = {
-        blacklist_iso = {'PT'},
+        blacklist_iso = {'PT','SY'},
         blacklist_geoname = {'6269131'}, --[[ eng ]]
         whitelist_ips = {'92.207.167.181', '5.43.0.1'}, --[[ eng, pt ]]
         error_message = "testing blocked",
@@ -99,6 +99,19 @@ describe("Plugin: geoip-mmdb (access)", function()
       local body = assert.res_status(401, res)
       assert.same("testing blocked", body)
     end)
+    it("blocks a specific request that's blacklisted", function()
+      local res = assert(client:send {
+        method  = "GET",
+        path    = "/status/200",
+        headers = {
+          ["Host"] = "test1.com",
+          ["X-Forwarded-For"] = "95.212.34.153"
+        }
+      })
+      local body = assert.res_status(401, res)
+      assert.same("testing blocked", body)
+    end)
+    
     it("allows if in whitelist", function()
       local res = assert(client:send {
         method  = "GET",
