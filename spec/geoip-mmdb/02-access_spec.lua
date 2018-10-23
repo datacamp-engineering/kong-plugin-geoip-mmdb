@@ -108,7 +108,7 @@ describe("Plugin: geoip-mmdb (access)", function()
           ["X-Forwarded-For"] = "95.212.34.153"
         }
       })
-      local body = assert.res_status(401, res)
+      local body = assert.res_status(403, res)
       assert.same("testing blocked", body)
     end)
     
