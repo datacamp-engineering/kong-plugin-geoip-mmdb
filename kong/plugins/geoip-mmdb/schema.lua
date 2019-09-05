@@ -16,7 +16,9 @@ return {
   fields = {
     whitelist_ips = {type = "array", func = validate_ips},
     blacklist_iso = {type = "array"},
-    blacklist_geoname = {type = "array"},
+    enable_country_injection = { type = "boolean", required = true, default = false },
+    country_header_iso = { type = "string", required = true, default = "X-Country-Code" },
+    country_header_name = { type = "string", required = false },
     error_status = {type = "number", default=403},
     error_message = {type = "string", default="This site is unavailable in your region"}
   }

@@ -2,7 +2,9 @@ local plugin = require("kong.plugins.base_plugin"):extend()
 local iputils = require "resty.iputils"
 local mmdb = require "mmdb"
 local ngx = require "ngx"
-local dbfile = "/var/opt/geolite/latest/GeoLite2-City.mmdb"
+local dbfile = "/etc/kong/GeoLite2-Country.mmdb"
+
+local req_set_header = ngx.req.set_header
 
 local new_tab
 do
@@ -73,26 +75,37 @@ function plugin:access(conf)
 
   local geo_data = geodb:search_ipv4(remote_addr)
 
+  -- Inject country header
+  if conf.enable_country_injection then
+    ngx.log(ngx.DEBUG, "Starting to extract country headers")
+    if geo_data ~= nil and geo_data.country ~= nil and geo_data.country.iso_code ~= nil  then
+      ngx.log(ngx.DEBUG, "Adding header ->" .. conf.country_header_iso ..":"..geo_data.country.iso_code)
+      req_set_header(conf.country_header_iso, geo_data.country.iso_code)  
+    else
+      ngx.log(ngx.ERR,"Header value missing in " .. conf.country_header_iso )
+      req_set_header(conf.country_header_iso, "Unknown") 
+    end
+    if conf.country_header_name ~= nil and geo_data ~= nil and geo_data.country ~= nil and geo_data.country.names.en ~= nil  then
+      ngx.log(ngx.DEBUG, "Adding header ->" .. conf.country_header_name ..":"..geo_data.country.names.en)
+      req_set_header(conf.country_header_name, geo_data.country.names.en)  
+    else
+      ngx.log(ngx.ERR,"Header value missing in " .. conf.country_header_name )
+      req_set_header(conf.country_header_name, "Unknown") 
+    end
+  end
+
+  -- check whitelist IP
   if conf.whitelist_ips and #conf.whitelist_ips > 0 then
     if iputils.ip_in_cidrs(remote_addr, cidr_cache(conf.whitelist_ips)) then
       return
     end
   end
 
+  -- Block excluded countries
   if conf.blacklist_iso and #conf.blacklist_iso > 0 and geo_data ~= nil and geo_data.country ~= nil and geo_data.country.iso_code ~= nil then
     for i,line in ipairs(conf.blacklist_iso) do
       if line == geo_data.country.iso_code then
         block_respond(conf)
-      end
-    end
-  end
-
-  if conf.blacklist_geoname and #conf.blacklist_geoname > 0 and geo_data ~= nil and geo_data.subdivisions ~= nil then
-    for i,line in ipairs(conf.blacklist_geoname) do
-      for j,subdivision in ipairs(geo_data.subdivisions) do
-        if tonumber(line) == subdivision.geoname_id then
-          block_respond(conf)
-        end
       end
     end
   end
