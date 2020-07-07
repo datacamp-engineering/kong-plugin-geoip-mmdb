@@ -61,6 +61,35 @@ describe("Plugin: geoip-mmdb (access)", function()
     end)
   end)
 
+  describe("set geo country header", function()
+    it('sets the country iso for a valid ip', function()
+      local res = assert(client:send {
+        method  = "GET",
+        path    = "/status/200",
+        headers = {
+          ["Host"] = "test1.com",
+          ["X-Forwarded-For"] = "92.207.167.181"
+        },
+      })
+
+      local header_value = assert.request(res).has.header("x-geo-country")
+      assert.equal("GB", header_value)
+    end)
+    it('sets zz for an invalid or unkown ip', function()
+      local res = assert(client:send {
+        method  = "GET",
+        path    = "/status/200",
+        headers = {
+          ["Host"] = "test1.com",
+          ["X-Forwarded-For"] = "127.0.0.1"
+        },
+      })
+
+      local header_value = assert.request(res).has.header("x-geo-country")
+      assert.equal("ZZ", header_value)
+    end)
+  end)
+
   describe("blacklist_geoname", function()
     it("blocks a request that's blacklisted", function()
       local res = assert(client:send {

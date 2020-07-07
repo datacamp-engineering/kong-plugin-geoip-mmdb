@@ -73,6 +73,12 @@ function plugin:access(conf)
 
   local geo_data = geodb:search_ipv4(remote_addr)
 
+  if geo_data ~= nil and geo_data.country ~= nil and geo_data.country.iso_code ~= nil then
+    kong.service.request.set_header("X-Geo-Country", geo_data.country.iso_code)
+  else
+    kong.service.request.set_header("X-Geo-Country", "ZZ")
+  end
+
   if conf.whitelist_ips and #conf.whitelist_ips > 0 then
     if iputils.ip_in_cidrs(remote_addr, cidr_cache(conf.whitelist_ips)) then
       return
