@@ -26,8 +26,7 @@ jobs:
       - run:
           name: Test
           command: |
-            wget -O /tmp/geolite.tar.gz http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
-            mkdir -p /var/opt/geolite/ && tar zxvf /tmp/geolite.tar.gz -C /var/opt/geolite/
+            mkdir -p /var/opt/geolite/ && tar zxvf data/GeoLite2-City.tar.gz -C /var/opt/geolite/
             ln -nsf /var/opt/geolite/Geo* /var/opt/geolite/latest
 
             export LUA_PATH="/root/project/?.lua;/root/project/?/init.lua;/kong/?.lua;;"
